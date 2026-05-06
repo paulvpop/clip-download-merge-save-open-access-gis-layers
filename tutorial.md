@@ -49,23 +49,19 @@ function prepareDistrictExport(districtName) {
 
 // Use the function
 var districtsList = ['SIANG', 'UPPER SIANG', 'EAST SIANG'];
-for (var i = 0; i < districtsList.length; i++) {
-  var name = districtsList[i];
-  var collection = prepareDistrictExport(name);
-  var count = collection.size().getInfo();
+districtsList.forEach(function(name) {
+  var safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
+  var baseName = 'Drainage_' + safeName;
   
-  if (count > 0) {
-    var safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
-    Export.table.toDrive({
-      collection: collection,
-      description: 'Drainage_' + safeName,
-      folder: 'Paul-GEE-downloads/Districts',
-      fileNamePrefix: 'drainage_' + safeName,
-      fileFormat: 'SHP'
-    });
-    print('Export created for: ' + name + ' (' + count + ' features)');
-  }
-}
+  Export.table.toDrive({
+    collection: prepareDistrictExport(name),
+    description: baseName,
+    folder: 'Paul-GEE-downloads/Districts',
+    fileNamePrefix: baseName.toLowerCase(),
+    fileFormat: 'SHP'
+  });
+  print('Export created for: ' + name);
+});
 
 // Add districts to map
 var siangDistrict = roi.filter(ee.Filter.eq('District', 'SIANG'));  /// Change the name of district you want to view
