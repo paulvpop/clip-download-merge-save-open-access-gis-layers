@@ -1,8 +1,16 @@
+//The following is a script to download the drainage layer clipped to certain districts of India, 
+// with the use of an Indian districts shapefile. District boundaries (and other types of 
+// administrative boundaries are also available via CoRE Stack). You would just need to convert
+// the geojson to shapefile format (which can be done in QGIS) and then upload as an asset 
+// in Google Earth Engine. Make sure to create a zip of .shp, .dbf, .shx, and .prj files 
+// (nothing more, nothing less) of the this administrative layer before uploading to GEE (it won't
+// work otherwise).
+
 // Load drainage lines
 var drainage_lines = ee.FeatureCollection("projects/corestack-datasets/assets/datasets/drainage-line/pan_india_drainage_lines");
 
 // Load the region of interest
-var roi = ee.FeatureCollection("projects/ee-paulpop/assets/ap_districts");
+var roi = ee.FeatureCollection("projects/ee-birdlab/assets/ap_districts");
 
 // Define drainage color palette. Note that this palette is from the sample code given by CoRE Stack.
 var drainagePalette = ee.Dictionary({
@@ -46,7 +54,7 @@ districtsList.forEach(function(name) {
   Export.table.toDrive({
     collection: prepareDistrictExport(name),
     description: baseName,
-    folder: 'Paul-GEE-downloads/Districts',
+    folder: 'GEE-downloads/Districts',
     fileNamePrefix: baseName.toLowerCase(),
     fileFormat: 'SHP'
   });
