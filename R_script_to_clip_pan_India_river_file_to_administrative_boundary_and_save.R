@@ -1,3 +1,6 @@
+# The Rivers geojson from CoRE Stack is 592 MB. It would best to clip the rivers occuring to the area of 
+# interest (Arunachal Pradesh in my case). The following R script will help in doing that.
+
 # Set the working directory (Ctrl+Shift+H or the following line of code (change the file path to yours)):
 setwd("D:/GIS_files/Arunachal")
 
