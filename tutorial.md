@@ -15,7 +15,7 @@ work otherwise).
 var drainage_lines = ee.FeatureCollection("projects/corestack-datasets/assets/datasets/drainage-line/pan_india_drainage_lines");
 
 // Load the region of interest
-var roi = ee.FeatureCollection("projects/ee-paulpop/assets/ap_districts");
+var roi = ee.FeatureCollection("projects/ee-birdlab/assets/ap_districts");
 
 // Define drainage color palette. Note that this palette is from the sample code given by CoRE Stack.
 var drainagePalette = ee.Dictionary({
@@ -59,7 +59,7 @@ districtsList.forEach(function(name) {
   Export.table.toDrive({
     collection: prepareDistrictExport(name),
     description: baseName,
-    folder: 'Paul-GEE-downloads/Districts',
+    folder: 'GEE-downloads/Districts',
     fileNamePrefix: baseName.toLowerCase(),
     fileFormat: 'SHP'
   });
