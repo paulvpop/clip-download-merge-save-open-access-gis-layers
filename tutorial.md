@@ -3,6 +3,12 @@ The download links are available from the [CoRE Stack GEE Layers Links sheet](ht
 The drainage layer available for the entirety of India in the geojson format is 12.37 GB in size. Such large files requires large amount of data to download as well 
 as space to retain. It's best to open it in Google Earth Engine, clip it to the area of interest, and then download the lower sized files.
 
+*Version 1.0 - last updated 2026-05-08
+Last update - recommended practices*
+
+View the most current version at https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers
+
+
 ## Drainage lines in India
 
 The following is a script to download the drainage layer clipped to certain districts of India, with the use of an Indian districts shapefile. District boundaries (and other types of 
@@ -284,6 +290,36 @@ print(paste("Clipped features:", nrow(clipped_all_geometries)))
 st_write(clipped_all_geometries, "./Drainage-maps/rivers_arunachal.gpkg",
          delete_layer = TRUE)
 ```
+
+## Buildings
+
+For this tutorial, we will use the data from Google Open Buildings. You can view it at [Indian Open Maps viewer](https://indianopenmaps.com/viewer#source=/google-buildings/&map=7.71/28.345/94.558&terrain=false&base=Google+Hybrid). 
+
+**Step 1:** Download the tiles that cover your area of interest from [here](https://sites.research.google/gr/open-buildings/#open-buildings-download ). These are quite large tiles. So, we need to clip them.
+
+**Step 2:** Unzip the files which will have a file name like *375_buildings.csv.gz*. The file size can be very large for some area (like 9 GB) or a very small (a few MB). The folder will contain a csv file.
+
+**Step 3:** Open QGIS.
+
+**Step 4:** Since the file sizes can be very large which can slow down or hang QGIS when multiple files are loaded at once, we will have to convert it to a more efficient and space-saving format i.e. (Geo)parquet. Open of the file by going selecting
+
+```
+Layer > Add Layer > Add Delimited Text Layer
+```
+<img width="743" height="640" alt="image" src="https://github.com/user-attachments/assets/bf133ff3-62ed-4ecd-a4ae-8c995e2785ab" />
+
+**Step 5:** Click on ... on the right of 'File name' and select on the file.
+
+<img width="1018" height="675" alt="image" src="https://github.com/user-attachments/assets/3d3a37c9-5aab-4366-b3cc-bf5cf4faf906" />
+
+**Step 6:** Change the 'Geometry definition' to 'Well Known Text', and then press 'Add'.
+
+<img width="1002" height="664" alt="image" src="https://github.com/user-attachments/assets/8ae6139a-176e-48a7-8d55-f5af086572f5" />
+
+
+
+
+
 
 
 
