@@ -295,7 +295,9 @@ st_write(clipped_all_geometries, "./Drainage-maps/rivers_arunachal.gpkg",
 
 For this tutorial, we will use the data from Google Open Buildings. You can view it at [Indian Open Maps viewer](https://indianopenmaps.com/viewer#source=/google-buildings/&map=7.71/28.345/94.558&terrain=false&base=Google+Hybrid). 
 
-I will show three different methods to carry out merging and clipping - one using only R (most efficient), another using R and QGIS (moderately efficient) and the last one, only using QGIS (the leaste efficient).
+I will show three different methods to carry out merging and clipping - one using only R (most efficient for large files), another one only using QGIS (the least efficient for large files), and the last using R and QGIS (moderately efficient for large files).
+
+### Method B - only using QGIS
 
 **Step 1:** Download all the tiles that cover your area of interest from [here](https://sites.research.google/gr/open-buildings/#open-buildings-download ). These are quite large tiles. So, we need to clip them.
 
@@ -308,33 +310,96 @@ I will show three different methods to carry out merging and clipping - one usin
 ```
 Layer > Add Layer > Add Delimited Text Layer
 ```
-<img width="743" height="640" alt="image" src="https://github.com/user-attachments/assets/bf133ff3-62ed-4ecd-a4ae-8c995e2785ab" />
+<img width="743" height="640" alt="image" src="https://github.com/user-attachments/assets/bf133ff3-62ed-4ecd-a4ae-8c995e2785ab" /> <br>
 
 **Step 5:** Click on ... on the right of 'File name' and select on the file.
 
-<img width="996" height="650" alt="image" src="https://github.com/user-attachments/assets/427775bb-fc99-4478-b8a2-e87d77a8d27e" />
+<img width="996" height="650" alt="image" src="https://github.com/user-attachments/assets/427775bb-fc99-4478-b8a2-e87d77a8d27e" /> <br>
 
 **Step 6:** Change the 'Geometry definition' to 'Well Known Text', and then press 'Add'.
 
-<img width="999" height="660" alt="image" src="https://github.com/user-attachments/assets/4c69839b-867f-4e10-a469-f5bc5fb7fd34" />
+<img width="999" height="660" alt="image" src="https://github.com/user-attachments/assets/4c69839b-867f-4e10-a469-f5bc5fb7fd34" /> <br>
 
 **Step 7:** Right Click on the loaded file > `Export > Save Feature As...`
 
-<img width="585" height="434" alt="image" src="https://github.com/user-attachments/assets/23488cf6-7cc3-4256-ae70-6a9867347134" />
+<img width="585" height="434" alt="image" src="https://github.com/user-attachments/assets/23488cf6-7cc3-4256-ae70-6a9867347134" /> <br>
 
 **Step 8:** Select '(Geo)Parquet from the drop-down list under 'Format'.
 
-<img width="580" height="663" alt="image" src="https://github.com/user-attachments/assets/9901d3e9-e596-4c15-b1e6-3806cf519996" />
+<img width="580" height="663" alt="image" src="https://github.com/user-attachments/assets/9901d3e9-e596-4c15-b1e6-3806cf519996" /> <br>
 
-**Step 9:** Give it a name (ideally the same name to keep track) and press 'OK'.
+**Step 9:** Give it a name (ideally the same name to keep track) and press 'OK'. Note that a .qmd file will also be saved along with the .parquet file to save metadata.
 
-<img width="589" height="662" alt="image" src="https://github.com/user-attachments/assets/16b2aefa-248b-42cc-b37a-320609963f62" />
+<img width="589" height="662" alt="image" src="https://github.com/user-attachments/assets/16b2aefa-248b-42cc-b37a-320609963f62" /> <br>
 
 **Step 10:** Since 'Add saved file to map' was turned on in the last step, the GeoParquet files will already be in the QGIS environment. Remove the corresponding CSV file from QGIS to clear valuable memory.
 
 **Step 11:** Repeat steps 2 to 10 for all the csv files containing the buildings in your area of interest.
 
-**Step 12:** 
+**Step 12:** In your 'Processing Toolbox', search and select the 'Merge vector layers'.
+
+<img width="1035" height="833" alt="image" src="https://github.com/user-attachments/assets/b87bc06d-9aab-4704-8a25-c54ce2c0ae59" /> <br>
+
+**Step 13:** Under 'Input layers', select all the buildings layers.
+
+<img width="1017" height="165" alt="image" src="https://github.com/user-attachments/assets/0db4e473-ad8a-4630-b7b9-192000e076fc" /> <br>
+
+**Step 14:** Press 'Run'. Merging will take a few minutes (for the size of a large state like Arunachal Pradesh in India) and you can see the progress on the bottom panel. This will produce a 'Merged' file.
+
+<img width="293" height="45" alt="image" src="https://github.com/user-attachments/assets/95d59428-cf38-4bec-9864-cd03650083db" /> <br>
+
+**Step 15:** In your 'Processing Toolbox', search and select the 'Clip' under 'Vector Overlay.
+
+<img width="287" height="392" alt="image" src="https://github.com/user-attachments/assets/1651d5ba-f504-4fc3-a082-4193ca40644a" /> <br>
+
+**Step 16:** Keep the 'Input layer' as 'Merged' and 'Overlay layer' as your area of interest.
+
+<img width="1369" height="756" alt="image" src="https://github.com/user-attachments/assets/9c164ee7-2ef5-4646-bff3-7d7149015895" /> <br>
+
+**Step 17:** Under 'Clipped', click on the  `...` and give a file name for the output to save it permanently.
+
+**Step 18:** Click on 'Run' to produce the desired final clipped output. For the large state of Arunachal Pradesh, this took 5 minutes 27 seconds.
+
+
+
+File size comparison:
+
+Individual file sizes:
+
+CSV:
+371_buildings.csv 9.6 MB
+373_buildings.csv 929 MB
+375_buildings.csv 8.90 GB
+377_buildings.csv 41.5 MB
+Total: 9.86 GB
+
+R:
+371_buildings.parquet 3.33 MB
+373_buildings.parquet 229 MB
+375_buildings.parquet 3.11 GB
+377_buildings.parquet 13.9 MB
+Total: 3.35 GB
+
+QGIS:
+371_buildings.parquet 4.26 MB
+373_buildings.parquet 302 MB
+375_buildings.parquet 4.07 GB
+377_buildings.parquet 17.8 MB
+Total: 4.39 GB
+
+Final file size
+
+QGIS 
+
+shapefile:  1.45 GB (105 MB compressed)
+GeoPackage: 590 MB
+(Geo)Parquet: 106 MB
+
+R
+(Geo)Parquet: 81.5 MB
+
+
+
 
 
 
