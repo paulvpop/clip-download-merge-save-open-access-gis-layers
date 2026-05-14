@@ -297,6 +297,12 @@ For this tutorial, we will use the data from Google Open Buildings. You can view
 
 I will show three different methods to carry out merging and clipping - one using only R (most efficient for large files), another one only using QGIS (the least efficient for large files), and the last using R and QGIS (moderately efficient for large files).
 
+### Method A - only using R
+
+```
+
+```
+
 ### Method B - only using QGIS
 
 **Step 1:** Download all the tiles that cover your area of interest from [here](https://sites.research.google/gr/open-buildings/#open-buildings-download ). These are quite large tiles. So, we need to clip them.
