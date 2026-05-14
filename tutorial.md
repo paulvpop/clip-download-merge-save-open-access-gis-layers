@@ -295,7 +295,9 @@ st_write(clipped_all_geometries, "./Drainage-maps/rivers_arunachal.gpkg",
 
 For this tutorial, we will use the data from Google Open Buildings. You can view it at [Indian Open Maps viewer](https://indianopenmaps.com/viewer#source=/google-buildings/&map=7.71/28.345/94.558&terrain=false&base=Google+Hybrid). 
 
-**Step 1:** Download the tiles that cover your area of interest from [here](https://sites.research.google/gr/open-buildings/#open-buildings-download ). These are quite large tiles. So, we need to clip them.
+I will show three different methods to carry out merging and clipping - one using only R (most efficient), another using R and QGIS (moderately efficient) and the last one, only using QGIS (the leaste efficient).
+
+**Step 1:** Download all the tiles that cover your area of interest from [here](https://sites.research.google/gr/open-buildings/#open-buildings-download ). These are quite large tiles. So, we need to clip them.
 
 **Step 2:** Unzip the files which will have a file name like *375_buildings.csv.gz*. The file size can be very large for some area (like 9 GB) or a very small (a few MB). The folder will contain a csv file.
 
@@ -310,11 +312,34 @@ Layer > Add Layer > Add Delimited Text Layer
 
 **Step 5:** Click on ... on the right of 'File name' and select on the file.
 
-<img width="1018" height="675" alt="image" src="https://github.com/user-attachments/assets/3d3a37c9-5aab-4366-b3cc-bf5cf4faf906" />
+<img width="996" height="650" alt="image" src="https://github.com/user-attachments/assets/427775bb-fc99-4478-b8a2-e87d77a8d27e" />
 
 **Step 6:** Change the 'Geometry definition' to 'Well Known Text', and then press 'Add'.
 
-<img width="1002" height="664" alt="image" src="https://github.com/user-attachments/assets/8ae6139a-176e-48a7-8d55-f5af086572f5" />
+<img width="999" height="660" alt="image" src="https://github.com/user-attachments/assets/4c69839b-867f-4e10-a469-f5bc5fb7fd34" />
+
+**Step 7:** Right Click on the loaded file > `Export > Save Feature As...`
+
+<img width="585" height="434" alt="image" src="https://github.com/user-attachments/assets/23488cf6-7cc3-4256-ae70-6a9867347134" />
+
+**Step 8:** Select '(Geo)Parquet from the drop-down list under 'Format'.
+
+<img width="580" height="663" alt="image" src="https://github.com/user-attachments/assets/9901d3e9-e596-4c15-b1e6-3806cf519996" />
+
+**Step 9:** Give it a name (ideally the same name to keep track) and press 'OK'.
+
+<img width="589" height="662" alt="image" src="https://github.com/user-attachments/assets/16b2aefa-248b-42cc-b37a-320609963f62" />
+
+**Step 10:** Since 'Add saved file to map' was turned on in the last step, the GeoParquet files will already be in the QGIS environment. Remove the corresponding CSV file from QGIS to clear valuable memory.
+
+**Step 11:** Repeat steps 2 to 10 for all the csv files containing the buildings in your area of interest.
+
+**Step 12:** 
+
+
+
+
+
 
 
 
