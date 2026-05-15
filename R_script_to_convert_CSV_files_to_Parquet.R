@@ -2,7 +2,7 @@
 # Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# This is an R script to load, and save Google Open Buildings data in Parquet format - individual files will be saved for each corresponding csv. 
+# This an R script to load, and save Google Open Buildings data in Parquet format - individual files will be saved for each corresponding csv. 
 
 # First set your working directory
 # Ctrl+Shift+H
@@ -52,16 +52,16 @@ library(duckdb)
 
 # The following loop converts text geometries to binary geometry objects,
 # and processes files individually, creating one .parquet file per input .csv file.
-
+# Note that in the SELECT step, the other fields area_in_meters, confidence,
+# and full_plus_code have not been selected to save computational time. You can
+# retain them by adding them to right after longitude, seperated by commas
 # A loop to process each file
 for (f in file_paths) {
   output_name <- gsub("\\.csv$", ".parquet", basename(f))
   dbExecute(con, sprintf("
     COPY (
       SELECT ST_GeomFromText(geometry) AS geom,
-             latitude, longitude   # Note that in this step, the other fields area_in_meters, confidence,
-     # and full_plus_code have not been selected to save computational
-     # time. You can retain them by adding them to right after longitude, seperated by commas
+             latitude, longitude 
       FROM read_csv_auto('%s')
     ) TO '%s' WITH (FORMAT PARQUET)
   ", f, output_name))
