@@ -1,5 +1,5 @@
-Author: Paul Pop
-Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
+# Author: Paul Pop
+# Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # This is an R script to load, and save Google Open Buildings data in Parquet format - individual files will be saved for each corresponding csv. 
