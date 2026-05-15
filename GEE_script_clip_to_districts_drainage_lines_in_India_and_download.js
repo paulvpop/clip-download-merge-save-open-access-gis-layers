@@ -1,3 +1,7 @@
+// Author: Paul Pop
+// Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
+
+
 //The following is a script to download the drainage layer clipped to certain districts of India, 
 // with the use of an Indian districts shapefile. District boundaries (and other types of 
 // administrative boundaries are also available via CoRE Stack). You would just need to convert
