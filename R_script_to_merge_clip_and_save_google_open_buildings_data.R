@@ -1,5 +1,5 @@
-Author: Paul Pop
-Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
+# Author: Paul Pop
+# Affiliation: BIRD Lab, ATREE, Bengaluru (PI: Rajkamal Goswami)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # This is an R script to load, clip to study area, and save Google Open Buildings data in Parquet format.
