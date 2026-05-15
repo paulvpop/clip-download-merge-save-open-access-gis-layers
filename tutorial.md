@@ -17,7 +17,7 @@ This work was carried out under the BIRD lab, ATREE, Bengaluru (PI: Rajkamal Gos
 *Version 1.0 - last updated 2026-05-15 <br>
 Last update - File size comparison*
 
-View the most current version at https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers
+View the most current version at https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/tutorial.md
 
 
 ## Drainage lines in India
