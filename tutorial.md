@@ -19,8 +19,16 @@ Last update - File size comparison* <br>
 
 View the most current version at https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/tutorial.md
 
+- [Section 1: Drainage lines in India](#section-1-drainage-lines-in-india)
+- [Section 2: Rivers in India](#section-2-rivers-in-india)
+- [Section 3: Buildings in India](#section-3-buildings-in-india)
+  * [Method A - only using R](#method-a---only-using-r)
+  * [Method B - only using QGIS](#method-b---only-using-qgis)
+  * [Method C - using R and QGIS](#method-c---using-r-and-qgis)
+  * [File size comparison](#file-size-comparison)
 
-## Drainage lines in India
+
+## Section 1: Drainage lines in India
 
 The following is a script to download the drainage layer clipped to certain districts of India, with the use of an Indian districts shapefile. District boundaries (and other types of 
 administrative boundaries are also available via CoRE Stack). You would just need to convert the geojson to shapefile format (which can be done in QGIS) and then upload as an asset 
@@ -108,7 +116,7 @@ print('Check the Tasks tab to run the exports');
 print('=========================================');
 ```
 
-## Rivers in India
+## Section 2: Rivers in India
 
 The Rivers geojson from CoRE Stack is 592 MB. It would best to clip the rivers occuring to the area of interest (Arunachal Pradesh in my case). The following R script will help in doing that.
 
@@ -306,7 +314,7 @@ st_write(clipped_all_geometries, "./Drainage-maps/rivers_arunachal.gpkg",
          delete_layer = TRUE)
 ```
 
-## Buildings
+## Section 3: Buildings in India
 
 For this tutorial, we will use the data from Google Open Buildings. You can view it at [Indian Open Maps viewer](https://indianopenmaps.com/viewer#source=/google-buildings/&map=7.71/28.345/94.558&terrain=false&base=Google+Hybrid). 
 
@@ -545,7 +553,7 @@ Individual file sizes:
 
 This table shows that the original file format (CSV) is bulky and we can reduce the file size by nearly half or one-third by converting it into the Parquet format, the former if keeping all the columns and the latter if selecting the bare necessities (geometry, latitude and longitude).
 
-The final file size of a Parquet file that has only three selected columns containing building polygons for the entirety of Arunachal Pradesh is 81.5 MB. If keep all the columns, it is 106 MB. If saving as a GeoPackage, then it becomes 590 Mb. And shapefile is quite bulky at 1.45 GB (but 105 MB when compressed/zipped).
+The final file size of a Parquet file that has only three selected columns containing building polygons for the entirety of Arunachal Pradesh is 81.5 MB. If we keep all the columns, it is 106 MB. If saving as a GeoPackage, then it becomes 590 Mb. And shapefile is quite bulky at 1.45 GB (but 105 MB when compressed/zipped).
 
 
 
