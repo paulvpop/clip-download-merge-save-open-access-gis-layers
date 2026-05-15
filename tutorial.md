@@ -3,8 +3,17 @@ The download links are available from the [CoRE Stack GEE Layers Links sheet](ht
 The drainage layer available for the entirety of India in the geojson format is 12.37 GB in size. Such large files requires large amount of data to download as well 
 as space to retain. It's best to open it in Google Earth Engine, clip it to the area of interest, and then download the lower sized files.
 
-*Version 1.0 - last updated 2026-05-08
-Last update - recommended practices*
+>Requirements:<br>
+>QGIS v.3.x installed<br>
+>R v.4.x.x installed
+>RStudio installed
+
+This workflow has been authored by Paul Pop.
+
+This work was carried out under the BIRD lab, ATREE, Bengaluru (PI: Rajkamal Goswami).
+
+*Version 1.0 - last updated 2026-05-15 <br>
+Last update - File size comparison*
 
 View the most current version at https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers
 
@@ -295,11 +304,13 @@ st_write(clipped_all_geometries, "./Drainage-maps/rivers_arunachal.gpkg",
 
 For this tutorial, we will use the data from Google Open Buildings. You can view it at [Indian Open Maps viewer](https://indianopenmaps.com/viewer#source=/google-buildings/&map=7.71/28.345/94.558&terrain=false&base=Google+Hybrid). 
 
-I will show three different methods to carry out merging and clipping - one using only R (most efficient for large files), another one only using QGIS (the least efficient for large files), and the last using R and QGIS (moderately efficient for large files).
+I will show three different methods to carry out merging and clipping - one using only R (moderately to most efficient for large files), another one only using QGIS (the least efficient for large files), and the last using R and QGIS (moderately to most efficient for large files).
 
 ### Method A - only using R
 
-The following is an R script to load, clip to study area, merge and save Google Open Buildings data
+The following is an R script to load, clip to study area, merge and save Google Open Buildings data in Parquet form.
+
+You can find this as a standalone script to download [here](https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/R_script_to_merge_clip_and_save_google_open_buildings_data.R).
 
 ```
 # First set your working directory
@@ -356,12 +367,13 @@ all_files <- paste(shQuote(file_paths), collapse = ", ")
 
 # The following dbExecute()command executes a SQL query within DuckDB that reads multiple CSV files,
 # filters buildings within a boundary, and saves the results as a Parquet file.
+# Note that in SELECT step, the other fields area_in_meters, confidence, and full_plus_code have not 
+# been selected to save computationaltime. You can retain them by adding them to right after longitude, 
+# seperated by commas.
 dbExecute(con, sprintf("
   COPY (
     SELECT ST_GeomFromText(geometry) AS geom,
-           latitude, longitude             # Note that in this step, the other fields area_in_meters, confidence,
-     # and full_plus_code have not been selected to save computational
-     # time. You can retain them by adding them to right after longitude, seperated by commas
+           latitude, longitude             
     FROM read_csv_auto([%s])
     WHERE ST_Within(ST_GeomFromText(geometry), ST_GeomFromText('%s'))
   ) TO 'all_buildings_clipped.parquet' WITH (FORMAT PARQUET)
@@ -436,7 +448,9 @@ Layer > Add Layer > Add Delimited Text Layer
 
 ### Method C - Using R and QGIS
 
-The following is an R script to load, and save Google Open Buildings data in Parquet format - individual files for each corresponding csv 
+The following is an R script to load, and save Google Open Buildings data in Parquet format - individual files will be saved for each corresponding csv. 
+
+This can be found as a standalone script to download [here](https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/R_script_to_convert_CSV_files_to_Parquet.R).
 
 ```
 # First set your working directory
@@ -478,9 +492,6 @@ clip_boundary <- st_read("D:/GIS_files/Arunachal/arunachal_shapefile/Arunachal_P
 library(duckdb)
 # DuckDB is an embedded SQL database optimized for analytical queries.
 
-# Prepare all the files for processing
-all_files <- paste(shQuote(file_paths), collapse = ", ")
-
 # Create a connection to an in-memory DuckDB database:
  con <- dbConnect(duckdb()) # No file is created on disk (in-memory means temporary)
 # Install and loads DuckDB's spatial extension
@@ -488,57 +499,47 @@ all_files <- paste(shQuote(file_paths), collapse = ", ")
 # This enables geographic/spatial functions like ST_GeomFromText()
 # The extension adds GIS capabilities to DuckDB.
 
-# The following code converts CSV to Parquet, converts text geometries to binary geometry objects,
+# The following loop converts text geometries to binary geometry objects,
 # and processes files individually, creating one .parquet file per input .csv file.
-
+# Note that in the SELECT step, the other fields area_in_meters, confidence,
+# and full_plus_code have not been selected to save computational time. You can
+# retain them by adding them to right after longitude, seperated by commas
 # A loop to process each file
 for (f in file_paths) {
   output_name <- gsub("\\.csv$", ".parquet", basename(f))
   dbExecute(con, sprintf("
     COPY (
       SELECT ST_GeomFromText(geometry) AS geom,
-             latitude, longitude
+             latitude, longitude 
       FROM read_csv_auto('%s')
     ) TO '%s' WITH (FORMAT PARQUET)
   ", f, output_name))
 }
+
+# Based on the saving time, it took a few seconds for a 9.16 MB CSV file to be processed,
+# ~17 min for a 929 MB file, ~2 hr 56 min for a 3.11 GB file, and less than a minute for a
+# 41.5 MB file to be processed.
 ```
 
-File size comparison:
+After running the above script, the outputs would be non-clipped Parquet versions of the original CSVs. These files will be nearly 0.25 to 0.45 times that of the original size, making it easier to load into QGIS without hanging or crashing it.
+
+Load all these individual Parquet files into QGIS and then follow the Steps 12 to 18 in Method B to get the final clipped file.
+
+### File size comparison
 
 Individual file sizes:
 
-CSV:
-371_buildings.csv 9.6 MB
-373_buildings.csv 929 MB
-375_buildings.csv 8.90 GB
-377_buildings.csv 41.5 MB
-Total: 9.86 GB
+| Tile name     | CSV     | Parquet (all columns) | Parquet (selected columns) |
+|---------------|---------|-----------------------|----------------------------|
+| 371_buildings | 9.6 MB  | 4.26 MB               | 3.33 MB                    |
+| 373_buildings | 929 MB  | 302 MB                | 229 MB                     |
+| 375_buildings | 8.90 GB | 4.07 GB               | 3.11 GB                    |
+| 377_buildings | 41.5 MB | 17.8 MB               | 13.9 MB                    |
+| Total         | 9.86 GB | 4.39 GB               | 3.35 GB                    |
 
-R:
-371_buildings.parquet 3.33 MB
-373_buildings.parquet 229 MB
-375_buildings.parquet 3.11 GB
-377_buildings.parquet 13.9 MB
-Total: 3.35 GB
+This table shows that the original file format (CSV) is bulky andw we can reduce the file size by nearly half or one-third by converting it into the Parquet format, the former if keeping all the columns and the latter if selecting the bare necessities (geometry, latitude and longitude).
 
-QGIS:
-371_buildings.parquet 4.26 MB
-373_buildings.parquet 302 MB
-375_buildings.parquet 4.07 GB
-377_buildings.parquet 17.8 MB
-Total: 4.39 GB
-
-Final file size
-
-QGIS 
-
-shapefile:  1.45 GB (105 MB compressed)
-GeoPackage: 590 MB
-(Geo)Parquet: 106 MB
-
-R
-(Geo)Parquet: 81.5 MB
+The final file size of a Parquet file that has only three selected columns containing building polygons for the entirety of Arunachal Pradesh is 81.5 MB. If keep all the columns, it is 106 MB. If saving as a GeoPackage, then it becomes 590 Mb. And shapefile is quite bulky at 1.45 GB (but 105 MB when compressed/zipped).
 
 
 
