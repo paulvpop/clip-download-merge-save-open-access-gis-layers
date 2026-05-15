@@ -543,7 +543,7 @@ Individual file sizes:
 | 377_buildings | 41.5 MB | 17.8 MB               | 13.9 MB                    |
 | Total         | 9.86 GB | 4.39 GB               | 3.35 GB                    |
 
-This table shows that the original file format (CSV) is bulky andw we can reduce the file size by nearly half or one-third by converting it into the Parquet format, the former if keeping all the columns and the latter if selecting the bare necessities (geometry, latitude and longitude).
+This table shows that the original file format (CSV) is bulky and we can reduce the file size by nearly half or one-third by converting it into the Parquet format, the former if keeping all the columns and the latter if selecting the bare necessities (geometry, latitude and longitude).
 
 The final file size of a Parquet file that has only three selected columns containing building polygons for the entirety of Arunachal Pradesh is 81.5 MB. If keep all the columns, it is 106 MB. If saving as a GeoPackage, then it becomes 590 Mb. And shapefile is quite bulky at 1.45 GB (but 105 MB when compressed/zipped).
 
