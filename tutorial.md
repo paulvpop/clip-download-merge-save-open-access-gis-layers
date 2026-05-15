@@ -1,3 +1,5 @@
+This tutorial will help a user to clip-and-download (using google Earth Engine) or download-and-(merge)-clip (using R and/or QGIS) large open access rasters. Specifically, in this case, data from [Core Stack](https://ee-corestackdev.projects.earthengine.app/view/core-stack-gee-app) and [google Open Buildings](https://sites.research.google/gr/open-buildings/) will be used. This makes the downloads smaller or the data smaller after download, so that unnecessary download and/or storage can be avoided. This will also help in loading the layers in QGIS without it crashing or hanging. Once loaded in QGIS, they can further be merged, clipped to desired area, and then saved.
+
 Many GIS layers are publicly available from [CoRE Stack](https://ee-corestackdev.projects.earthengine.app/view/core-stack-gee-app). 
 The download links are available from the [CoRE Stack GEE Layers Links sheet](https://docs.google.com/spreadsheets/d/1xS5d7vgyjyoqqnmmajKDZBx9qS6GqyAdSbNDR62ot2Y/edit?gid=0#gid=0).
 The drainage layer available for the entirety of India in the geojson format is 12.37 GB in size. Such large files requires large amount of data to download as well 
@@ -5,7 +7,7 @@ as space to retain. It's best to open it in Google Earth Engine, clip it to the 
 
 >Requirements:<br>
 >QGIS v.3.x installed<br>
->R v.4.x.x installed
+>R v.4.x.x installed<br>
 >RStudio installed
 
 This workflow has been authored by Paul Pop.
@@ -24,6 +26,8 @@ The following is a script to download the drainage layer clipped to certain dist
 administrative boundaries are also available via CoRE Stack). You would just need to convert the geojson to shapefile format (which can be done in QGIS) and then upload as an asset 
 in Google Earth Engine. Make sure to create a zip of .shp, .dbf, .shx, and .prj files (nothing more, nothing less) of the this administrative layer before uploading to GEE (it won't
 work otherwise).
+
+You can find this as a standalone script to download [here](https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/GEE_script_clip_to_districts_drainage_lines_in_India_and_download.js).
 
 ```
 // Load drainage lines
@@ -107,6 +111,8 @@ print('=========================================');
 ## Rivers in India
 
 The Rivers geojson from CoRE Stack is 592 MB. It would best to clip the rivers occuring to the area of interest (Arunachal Pradesh in my case). The following R script will help in doing that.
+
+You can find this as a standalone script to download [here](https://github.com/paulvpop/clip-download-merge-save-open-access-gis-layers/blob/main/R_script_to_clip_pan_India_river_file_to_administrative_boundary_and_save.R).
 
 ```
 # Set the working directory (Ctrl+Shift+H or the following line of code (change the file path to yours)):
